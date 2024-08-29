@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Prático - NUTI</title>
+</head>
+<body>
+    <h1>Teste Prático - NUTI</h1>
+    <!-- informações do órgão -->
+    <div id="orgao">
+        <h2>Órgão</h2>
+        <p>Razão Social: MUNICIPIO DE JANDIRA</p>
+        <p>CNPJ: 46.522.991/0001-73</p>
+    </div>
+
+    <!-- contratos -->
+    <div id="contratos">
+        <h2>Contratos</h2>
+        <table id="contratos-table">
+            <tr>
+                <th>#</th>
+                <th>Data de vigência inicial</th>
+                <th>Data de vigência final</th>
+                <th>Razão social fornecedor</th>
+                <th>Objeto</th>
+                <th>Valor inicial</th>
+            </tr>
+            <tr id="contratos-table-carregando">
+                <td colspan="6">Carregando...</td>
+            </tr>
+        </table>
+    </div>
+                
+
+    <script src="assets/script/fetch.js"></script>
+    <script src="assets/script/utils.js"></script>
+    <script>
+        pageLoad();
+        async function pageLoad() {
+            let rawData = await getData();
+            const usefulData = await extractUsefulData(rawData);
+            rawData = null; // free memory
+            const contratos = usefulData[0]; // [0] array
+            const valorTotal = usefulData[1]; // [1] int
+
+            // populate table
+            const table = document.getElementById('contratos-table');
+            contratos.forEach((contrato, index) => {
+                const row = table.insertRow();
+                row.insertCell(0).textContent = index + 1;
+                row.insertCell(1).textContent = converterData(contrato.dataVigenciaInicio);
+                row.insertCell(2).textContent = converterData(contrato.dataVigenciaFim);
+                row.insertCell(3).textContent = contrato.nomeRazaoSocialFornecedor;
+                row.insertCell(4).textContent = contrato.objetoContrato;
+                row.insertCell(5).textContent = formatarValor(contrato.valorInicial);
+            });
+
+            // valor total acumulado
+            const row = table.insertRow();
+            const cell = row.insertCell(0);
+            cell.id = 'contratos-valor-total';
+            cell.colSpan = 6;
+            cell.textContent = `Valor total acumulado: ${formatarValor(valorTotal)}`;
+
+            // remove loading row
+            const loadingRow = document.getElementById('contratos-table-carregando');
+            loadingRow.remove();
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</body>
+</html>
