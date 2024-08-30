@@ -1,7 +1,4 @@
-/* 
-função para extrair somente os dados que
-serão utilizados no desafio proposto
-*/
+/* função para extrair somente os dados que serão utilizados no desafio proposto */
 async function extractUsefulData(data) {
     /* dados que serão utilizados */
     /*
@@ -95,7 +92,6 @@ async function extractUsefulData(data) {
     return [contratos, valorTotalContratos];
 }
 
-/* função para converter a data de yyyy-mm-dd para dd/mm/yyyy */
 function converterData(data) {
     let partes = data.split('-');
     return `${partes[2]}/${partes[1]}/${partes[0]}`;

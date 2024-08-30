@@ -16,7 +16,7 @@
 
     <!-- contratos -->
     <div id="contratos">
-        <h2>Contratos</h2>
+        <h2>Contratos (01/08/2024 até 31/08/2024)</h2>
         <table id="contratos-table">
             <tr>
                 <th>#</th>
@@ -33,18 +33,17 @@
     </div>
                 
 
-    <script src="assets/script/fetch.js"></script>
-    <script src="assets/script/utils.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/fetch.js"></script>
     <script>
-        pageLoad();
         async function pageLoad() {
             let rawData = await getData();
             const usefulData = await extractUsefulData(rawData);
-            rawData = null; // free memory
+            rawData = null; // liberar memoria
             const contratos = usefulData[0]; // [0] array
             const valorTotal = usefulData[1]; // [1] int
 
-            // populate table
+            // preencher tabela de contratos
             const table = document.getElementById('contratos-table');
             contratos.forEach((contrato, index) => {
                 const row = table.insertRow();
@@ -63,10 +62,21 @@
             cell.colSpan = 6;
             cell.textContent = `Valor total acumulado: ${formatarValor(valorTotal)}`;
 
-            // remove loading row
+            // remover row de loading
             const loadingRow = document.getElementById('contratos-table-carregando');
             loadingRow.remove();
+
+            // inserir contratos no banco de dados (local)
+            await fetch('http://localhost:3000/api/contratos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ contratos })
+            });
         }
+
+        pageLoad();
     </script>
 
     <style>
@@ -76,7 +86,6 @@
             padding: 20px;
         }
         table {
-            font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
         }
