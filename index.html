@@ -40,6 +40,7 @@
     <script>
         async function pageLoad() {
             let rawData = await getData();
+            if (!rawData) return;
             const usefulData = await extractUsefulData(rawData);
             rawData = null; // liberar memoria
             const contratos = usefulData[0]; // [0] array

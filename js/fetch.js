@@ -23,5 +23,6 @@ async function getData() {
         alert('Falha interna no servidor da API, tente novamente mais tarde');
         return null;
     }
-    throw new Error(`Falha ao buscar dados: ${response.status}`);
+    console.error('Erro ao buscar dados da API');
+    return null;
 }
