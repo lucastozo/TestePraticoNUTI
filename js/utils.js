@@ -78,6 +78,10 @@ async function extractUsefulData(data) {
     let contratos = [];
     let valorTotalContratos = 0;
     data = data.data;
+    // odenar os contratos por data de vigência inicial
+    data.sort((a, b) => {
+        return new Date(a.dataVigenciaInicio) - new Date(b.dataVigenciaInicio);
+    });
     data.forEach(item => {
         contratos.push({
             dataVigenciaInicio: item.dataVigenciaInicio,
